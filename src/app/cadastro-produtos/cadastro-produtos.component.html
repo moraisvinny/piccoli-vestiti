@@ -1,0 +1,41 @@
+<div class="container">
+  <h2>Cadastro de Produtos</h2>
+
+  <form [formGroup]="produtoForm" (ngSubmit)="salvarProduto()" novalidate>
+
+    <div class="form-group" [ngClass]="{'has-error': produtoForm.get('titulo').invalid && produtoForm.get('titulo').touched }">
+      <label for="titulo" class="control-label">Título</label>
+      <input type="text" id="titulo" class="form-control" formControlName="titulo" placeholder="Título do produto">
+
+      <small *ngIf="produtoForm.get('titulo').invalid && produtoForm.get('titulo').touched " class="form-text text-danger">Título é obrigatório</small>
+    </div>
+    <div class="form-group">
+      <label for="descricao" class="control-label">Descrição</label>
+      <textarea class="form-control" id="descricao" formControlName="descricao" placeholder="Descrição do produto" maxlength="400"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="link">Link</label>
+      <input type="text" class="form-control" name="link" id="link" placeholder="Link do Produto na Elo7">
+    </div>
+    <div class="form-group">
+      <label for="imagem1">Imagem 1</label>
+      <input type="file" id="imagem1">
+    </div>
+
+    <div class="form-group">
+      <label for="imagem2">Imagem 2</label>
+      <input type="file" id="imagem2">
+    </div>
+
+    <div class="form-group">
+      <label for="imagem3">Imagem 3</label>
+      <input type="file" id="imagem3">
+    </div>
+
+    <button id="botao-salvar" type="submit" class="btn btn-primary">Salvar</button>
+
+    <p>Form value: {{ produtoForm.value | json }}</p>
+    <p>Form value: {{ produtoForm.get('titulo').status | json }}</p>
+    <p>Form status: {{ produtoForm.status | json }}</p>
+  </form>
+</div>
