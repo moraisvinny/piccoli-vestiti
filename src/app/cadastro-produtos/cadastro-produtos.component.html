@@ -6,36 +6,33 @@
     <div class="form-group" [ngClass]="{'has-error': produtoForm.get('titulo').invalid && produtoForm.get('titulo').touched }">
       <label for="titulo" class="control-label">Título</label>
       <input type="text" id="titulo" class="form-control" formControlName="titulo" placeholder="Título do produto">
-
       <small *ngIf="produtoForm.get('titulo').invalid && produtoForm.get('titulo').touched " class="form-text text-danger">Título é obrigatório</small>
     </div>
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'has-error':produtoForm.get('descricao').invalid && produtoForm.get('descricao').touched}">
       <label for="descricao" class="control-label">Descrição</label>
       <textarea class="form-control" id="descricao" formControlName="descricao" placeholder="Descrição do produto" maxlength="400"></textarea>
+      <small *ngIf="produtoForm.get('descricao').invalid && produtoForm.get('descricao').touched " class="form-text text-danger">Descrição é obrigatória</small>
     </div>
-    <div class="form-group">
-      <label for="link">Link</label>
-      <input type="text" class="form-control" name="link" id="link" placeholder="Link do Produto na Elo7">
-    </div>
-    <div class="form-group">
-      <label for="imagem1">Imagem 1</label>
-      <input type="file" id="imagem1">
+    <div class="form-group" [ngClass]="{'has-error': produtoForm.get('link').invalid && produtoForm.get('link').touched}">
+      <label for="link" class="control-label">Link</label>
+      <input type="url" class="form-control" formControlName="link" id="link" placeholder="Link do Produto na Elo7">
+      <small *ngIf="produtoForm.get('link').invalid && produtoForm.get('link').touched " class="form-text text-danger">Link é obrigatório</small>
     </div>
 
-    <div class="form-group">
-      <label for="imagem2">Imagem 2</label>
-      <input type="file" id="imagem2">
+    <div class="form-group" [ngClass]="{'has-error':arquivoInvalido || quantidadeArquivosInvalida}"> 
+      <label for="imagem1" class="control-label">Imagem 1</label>
+      <input type="file" id="imagem1" (change)="populaArquivos($event)" accept="image/*" multiple>
+      <small *ngIf="arquivoInvalido" class="form-text text-danger">Escolha apenas arquivos do tipo imagem</small>
+      <small *ngIf="quantidadeArquivosInvalida" class="form-text text-danger">Escolha no máximo 2 imagens</small>
     </div>
 
-    <div class="form-group">
-      <label for="imagem3">Imagem 3</label>
-      <input type="file" id="imagem3">
-    </div>
 
-    <button id="botao-salvar" type="submit" class="btn btn-primary">Salvar</button>
+
+    <button id="botao-salvar" type="submit" class="btn btn-primary" [disabled]="!isValidForm()" >Salvar</button>
 
     <p>Form value: {{ produtoForm.value | json }}</p>
-    <p>Form value: {{ produtoForm.get('titulo').status | json }}</p>
+    <p>Titulo status: {{ produtoForm.get('titulo').status | json }}</p>
     <p>Form status: {{ produtoForm.status | json }}</p>
+    <p>Imagem1: {{this.imagem1 }}</p>
   </form>
 </div>
