@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { CadastroProdutosComponent } from './cadastro-produtos/cadastro-produtos.component';
+import { ProdutoService } from './produto.service';
 
 
 @NgModule({
@@ -17,7 +18,7 @@ import { CadastroProdutosComponent } from './cadastro-produtos/cadastro-produtos
     ReactiveFormsModule
 
   ],
-  providers: [],
+  providers: [ProdutoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

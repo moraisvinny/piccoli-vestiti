@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Produto } from '../shared/produto-model';
+import { Produto } from '../shared/models/produto-model';
+import { ProdutoService } from '../produto.service'
 
 @Component({
   selector: 'app-cadastro-produtos',
@@ -13,9 +14,9 @@ export class CadastroProdutosComponent implements OnInit {
   public imagens: File[] = []
   public arquivoInvalido: boolean
   public quantidadeArquivosInvalida: boolean
-  public produto: Produto
+  
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private produtoService: ProdutoService) {
     this.geraForm();
   }
 
@@ -40,10 +41,18 @@ export class CadastroProdutosComponent implements OnInit {
   }
 
   public salvarProduto(): void {
-    console.log("Salvei produto " + this.produtoForm.value.titulo)
+    console.log("Salvar produto - Component " + this.produtoForm.value.titulo)
 
-    this.produto = this.popularProduto();
-    console.log(this.produto);
+    let produto: Produto = this.popularProduto();
+    this.produtoService.incluir(produto, (erro: Error)=>{
+      if(erro) {
+        console.log("deu ruim no service")
+        return
+      }
+
+      console.log("retornei para o component")
+    })
+    
   }
 
   public popularProduto(): Produto {
