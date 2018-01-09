@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Produto } from '../shared/models/produto-model';
-import { ProdutoService } from '../produto.service'
+import { Produto } from '../../shared/models/produto-model';
+import { ProdutoService } from '../../produto.service'
 
 @Component({
   selector: 'app-cadastro-produtos',
@@ -14,7 +14,10 @@ export class CadastroProdutosComponent implements OnInit {
   public imagens: File[] = []
   public arquivoInvalido: boolean
   public quantidadeArquivosInvalida: boolean
-  
+  public msgErro: string
+  public salvouSucesso: boolean
+  public urls: any[]
+
 
   constructor(private fb: FormBuilder, private produtoService: ProdutoService) {
     this.geraForm();
@@ -26,7 +29,7 @@ export class CadastroProdutosComponent implements OnInit {
   public isValidForm(): boolean {
 
     return this.produtoForm.valid
-      && this.imagens.length > 0 
+      && this.imagens.length > 0
       && this.imagens.length < 3
       && !this.arquivoInvalido
       && !this.quantidadeArquivosInvalida
@@ -44,15 +47,20 @@ export class CadastroProdutosComponent implements OnInit {
     console.log("Salvar produto - Component " + this.produtoForm.value.titulo)
 
     let produto: Produto = this.popularProduto();
-    this.produtoService.incluir(produto, (erro: Error)=>{
-      if(erro) {
-        console.log("deu ruim no service")
+    this.produtoService.incluir(produto, (erro: any) => {
+      console.log(erro)
+      if (erro != undefined) {
+        this.msgErro = "Erro ao salvar o produto"
         return
       }
-
-      console.log("retornei para o component")
     })
-    
+    this.produtoForm.reset();
+    this.urls = [];
+    $('#imagem1').val('')
+    this.salvouSucesso = true
+    setTimeout(() => {
+      this.salvouSucesso = false
+    }, 5000);
   }
 
   public popularProduto(): Produto {
@@ -69,6 +77,7 @@ export class CadastroProdutosComponent implements OnInit {
 
     this.quantidadeArquivosInvalida = false
     this.imagens = []
+    this.urls = []
     let arquivos: FileList = (<HTMLInputElement>event.target).files;
     if (arquivos.length > 2) {
       this.quantidadeArquivosInvalida = true
@@ -78,10 +87,24 @@ export class CadastroProdutosComponent implements OnInit {
     for (let i = 0; i < arquivos.length; i++) {
       if (!this.isTipoArquivoValido(arquivos[i])) {
         this.arquivoInvalido = true
+
+
         return
       }
+      
+        var reader = new FileReader();
+    
+        reader.onload = (event:any) => {
+          this.urls[i] = event.target.result;
+        }
+    
+        reader.readAsDataURL((<HTMLInputElement>event.target).files[i]);
+      
+      
       this.imagens.push(arquivos[i])
     }
+
+    
 
   }
 

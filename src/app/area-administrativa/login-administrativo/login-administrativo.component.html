@@ -1,0 +1,64 @@
+<div class="container">
+
+    <div *ngIf="!criarUsuario" class="card" style="width:18rem; margin-top:1rem;">
+        <div class="card-body">
+            <h5 class="card-title">Faça login para continuar</h5>
+            <form [formGroup]="loginForm" (ngSubmit)="realizaLogin()" novalidate>
+                <div class="form-group">
+                    <input class="form-control" [ngClass]="{'is-invalid': msgErro.length > 0 && loginForm.value.usuario.length <= 0}" formControlName="usuario" type="text" placeholder="Usuario">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" [ngClass]="{'is-invalid': msgErro.length > 0 && loginForm.value.senha.length <= 0}" formControlName="senha"
+                        type="password" placeholder="Senha">
+                </div>
+                <div class="float-left">
+
+                    <button class="btn btn-primary" type="submit">Entrar</button>
+                </div>
+                <div class="float-right">
+
+                    <button class="btn btn-link" type="button" (click)="criarConta()">Criar conta</button>
+                </div>
+
+            </form>
+            <div *ngIf="msgErro.length > 0  " style="clear: both; padding-top:1rem;">
+                <hr>
+                <small class="text-danger">{{msgErro}}</small>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="criarUsuario" class="card" style="width:18rem; margin-top:1rem;">
+        <div class="card-body">
+            <h5 class="card-title">Crie sua conta Administrativa</h5>
+            <!-- <form> -->
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="Nome de Usuário">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="email" placeholder="Seu email">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" placeholder="Defina uma Senha">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" placeholder="Repita a Senha">
+            </div>
+            <div>
+
+                <div class="float-left">
+
+                    <button class="btn btn-primary" type="submit">Criar Conta</button>
+                </div>
+                <div class="float-right">
+
+                        <button class="btn btn-secondary" type="button" (click)="voltarLogin()">Cancelar</button>
+                    </div>
+            </div>
+            <!-- </form> -->
+
+        </div>
+    </div>
+
+</div>
