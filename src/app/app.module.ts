@@ -9,6 +9,7 @@ import { CadastroProdutosComponent } from './area-administrativa/cadastro-produt
 import { ProdutoService } from './produto.service';
 import { AreaAdministrativaComponent } from './area-administrativa/area-administrativa.component';
 import { LoginAdministrativoComponent } from './area-administrativa/login-administrativo/login-administrativo.component';
+import { UsuarioService } from './usuario.service';
 
 
 @NgModule({
@@ -23,7 +24,7 @@ import { LoginAdministrativoComponent } from './area-administrativa/login-admini
     ReactiveFormsModule
 
   ],
-  providers: [ProdutoService],
+  providers: [ProdutoService, UsuarioService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

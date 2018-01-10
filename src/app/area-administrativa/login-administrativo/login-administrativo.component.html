@@ -5,10 +5,11 @@
             <h5 class="card-title">Faça login para continuar</h5>
             <form [formGroup]="loginForm" (ngSubmit)="realizaLogin()" novalidate>
                 <div class="form-group">
-                    <input class="form-control" [ngClass]="{'is-invalid': msgErro.length > 0 && loginForm.value.usuario.length <= 0}" formControlName="usuario" type="text" placeholder="Usuario">
+                    <input class="form-control" [ngClass]="{'is-invalid': msg.length > 0 && loginForm.value.usuario.length <= 0}" formControlName="usuario"
+                        type="text" placeholder="Usuario">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" [ngClass]="{'is-invalid': msgErro.length > 0 && loginForm.value.senha.length <= 0}" formControlName="senha"
+                    <input class="form-control" [ngClass]="{'is-invalid': msg.length > 0 && loginForm.value.senha.length <= 0}" formControlName="senha"
                         type="password" placeholder="Senha">
                 </div>
                 <div class="float-left">
@@ -19,45 +20,53 @@
 
                     <button class="btn btn-link" type="button" (click)="criarConta()">Criar conta</button>
                 </div>
-
             </form>
-            <div *ngIf="msgErro.length > 0  " style="clear: both; padding-top:1rem;">
+            <div *ngIf="msg.length > 0  " style="clear: both; padding-top:1rem;">
                 <hr>
-                <small class="text-danger">{{msgErro}}</small>
+                <small class="text-danger">{{msg}}</small>
             </div>
         </div>
     </div>
 
-
     <div *ngIf="criarUsuario" class="card" style="width:18rem; margin-top:1rem;">
         <div class="card-body">
             <h5 class="card-title">Crie sua conta Administrativa</h5>
-            <!-- <form> -->
-            <div class="form-group">
-                <input class="form-control" type="text" placeholder="Nome de Usuário">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="email" placeholder="Seu email">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="password" placeholder="Defina uma Senha">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="password" placeholder="Repita a Senha">
-            </div>
-            <div>
 
-                <div class="float-left">
+            <div *ngIf="msg.length > 0" class="alert" [ngClass]="{'alert-success': usuarioCriadoSucesso, 'alert-danger': !usuarioCriadoSucesso}" role="alert">
+                <small>{{msg}}</small>
+            </div>
 
-                    <button class="btn btn-primary" type="submit">Criar Conta</button>
+            <form [formGroup]="criaUsuarioForm" (ngSubmit)="salvarUsuario()" >
+                <div class="form-group">
+                    <input class="form-control" [ngClass]="{'is-invalid': msg.length > 0 && criaUsuarioForm.get('usuario').invalid}" formControlName="usuario" type="text" placeholder="Nome de Usuário">
                 </div>
-                <div class="float-right">
+                <div class="form-group">
+                    <input class="form-control" [ngClass]="{'is-invalid': msg.length > 0 && criaUsuarioForm.get('email').invalid}" formControlName="email" type="email" placeholder="Seu email">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" [ngClass]="{'is-invalid': msg.length > 0 && criaUsuarioForm.get('senha').invalid}" formControlName="senha" type="password" placeholder="Defina uma Senha">
+                    <small *ngIf="msg.length > 0 && criaUsuarioForm.get('senha').invalid" class="text-danger">A senha deve ter no mínimo 6 caracteres</small>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" [ngClass]="{'is-invalid': msg.length > 0 && criaUsuarioForm.get('senhaRepetida').invalid}" formControlName="senhaRepetida" type="password" placeholder="Repita a Senha">
+                </div>
+                <div>
+
+                    <div class="float-left">
+
+                        <button class="btn btn-primary" type="submit">Criar Conta</button>
+                    </div>
+                    <div class="float-right">
 
                         <button class="btn btn-secondary" type="button" (click)="voltarLogin()">Cancelar</button>
                     </div>
-            </div>
-            <!-- </form> -->
+                </div>
+            </form>
 
+            <div *ngIf="msg.length > 0  " style="clear: both; padding-top:1rem;">
+                <hr>
+                <small class="text-danger">{{msg}}</small>
+            </div>
         </div>
     </div>
 

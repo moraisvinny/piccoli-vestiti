@@ -12,7 +12,7 @@ export class ProdutoService {
 
     try {
       
-      firebase.database().ref('produtos').push(null)
+      firebase.database().ref('produtos').push(produto)
         .then((result: any) => {
 
           console.log("registro inserido com o id: " + result.key);
