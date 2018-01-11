@@ -5,8 +5,8 @@
             <h5 class="card-title">Faça login para continuar</h5>
             <form [formGroup]="loginForm" (ngSubmit)="realizaLogin()" novalidate>
                 <div class="form-group">
-                    <input class="form-control" [ngClass]="{'is-invalid': msg.length > 0 && loginForm.value.usuario.length <= 0}" formControlName="usuario"
-                        type="text" placeholder="Usuario">
+                    <input class="form-control" [ngClass]="{'is-invalid': msg.length > 0 && loginForm.value.email.length <= 0}" formControlName="email"
+                        type="text" placeholder="Email">
                 </div>
                 <div class="form-group">
                     <input class="form-control" [ngClass]="{'is-invalid': msg.length > 0 && loginForm.value.senha.length <= 0}" formControlName="senha"
@@ -70,4 +70,5 @@
         </div>
     </div>
 
+    
 </div>

@@ -4,12 +4,14 @@ import { UsuarioService } from '../../usuario.service';
 import { Usuario } from '../../shared/models/usuario.model';
 
 
+
 @Component({
   selector: 'app-login-administrativo',
   templateUrl: './login-administrativo.component.html',
   styleUrls: ['./login-administrativo.component.css']
 })
 export class LoginAdministrativoComponent implements OnInit {
+
 
   public criarUsuario: boolean = false
   public loginForm: FormGroup
@@ -27,7 +29,7 @@ export class LoginAdministrativoComponent implements OnInit {
 
   geraForms(): void {
     this.loginForm = this.fb.group({
-      usuario: ['', Validators.required],
+      email: ['', Validators.required],
       senha: ['', Validators.required]
     })
 
@@ -41,11 +43,23 @@ export class LoginAdministrativoComponent implements OnInit {
   }
 
   realizaLogin() {
+
     if (!this.isFormularioLoginValido()) {
       console.log("formulário inválido")
       return
     }
-    console.log("Realiza Login")
+
+    this.usuarioService.login(
+      new Usuario(
+        null,
+        this.loginForm.value.email,
+        this.loginForm.value.senha,
+        null)).then((response) => {
+          // TODO  redirecionar para rotas
+        }).catch((error) => {
+          console.log("Erro ao logar")
+          return
+        })
   }
 
   isFormularioLoginValido(): boolean {
