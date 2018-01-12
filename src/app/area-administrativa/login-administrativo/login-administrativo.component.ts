@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsuarioService } from '../../usuario.service';
 import { Usuario } from '../../shared/models/usuario.model';
+import { Router } from '@angular/router';
 
 
 
@@ -19,7 +20,7 @@ export class LoginAdministrativoComponent implements OnInit {
   public msg: string = ""
   public usuarioCriadoSucesso: boolean = false
 
-  constructor(private fb: FormBuilder, private usuarioService: UsuarioService) {
+  constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private route: Router) {
     this.geraForms()
   }
 
@@ -54,12 +55,16 @@ export class LoginAdministrativoComponent implements OnInit {
         null,
         this.loginForm.value.email,
         this.loginForm.value.senha,
-        null)).then((response) => {
-          // TODO  redirecionar para rotas
+        null)).then(() => {
+          setTimeout(() => {
+            this.route.navigate(['/adm/produtos'])
+          }, 1000);
         }).catch((error) => {
           console.log("Erro ao logar")
           return
         })
+
+    
   }
 
   isFormularioLoginValido(): boolean {
