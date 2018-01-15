@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UsuarioService } from '../usuario.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-area-administrativa',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AreaAdministrativaComponent implements OnInit {
 
-  constructor() { }
+  constructor(private usuarioService: UsuarioService, private route: Router) { }
 
   ngOnInit() {
+  }
+
+  sair() {
+    this.usuarioService.logout();
+    this.route.navigate(['/adm/login'])
   }
 
 }

@@ -14,6 +14,7 @@ import { UsuarioService } from './usuario.service';
 import { ROUTES } from './app.routes';
 import { HomeComponent } from './home/home.component';
 import { AdmAuthGuardService } from './adm-auth-guard.service';
+import { LoadingModule } from 'ngx-loading';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { AdmAuthGuardService } from './adm-auth-guard.service';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES),
+    LoadingModule
 
   ],
   providers: [ProdutoService, UsuarioService, AdmAuthGuardService],

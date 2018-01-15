@@ -8,7 +8,6 @@ import { CanActivate } from '@angular/router';
 export class UsuarioService implements CanActivate {
 
   public tokenId: string
-  public perfilUsuario: string
   constructor() { }
 
   canActivate(): boolean {
@@ -24,34 +23,18 @@ export class UsuarioService implements CanActivate {
           .then((resposta) => {
             console.log("Usuario criado - " + resposta)
           })
-      }).catch((reason) => {
-        console.log("Erro no auth: ", reason)
-      });
+      })
   }
 
   login(usuario: Usuario): Promise<any> {
+    console.log("Inicio login")
+    return firebase.auth().signInWithEmailAndPassword(usuario.email, usuario.senha).then((resposta) => {
+      firebase.auth().currentUser.getIdToken().then((idToken) => {
 
-    return firebase.auth().signInWithEmailAndPassword(usuario.email, usuario.senha).then((resposta)=>{
-      
-      firebase.auth().currentUser.getIdToken().then((idToken)=>{
-        
-
-        firebase.database().ref()
-        .child('usuarios')
-        .orderByChild('email')
-        .equalTo(usuario.email).once('value').then((snapshot) => {
-
-          snapshot.forEach((childSnapshot: any) => {
-            
-            this.tokenId = idToken
-            this.perfilUsuario = childSnapshot.val().perfil
-            sessionStorage.setItem("idTokenPiccoli", idToken)
-            sessionStorage.setItem("perfilPiccoli", childSnapshot.val().perfil)
-
-          })
-        }) 
+        this.tokenId = idToken
+        sessionStorage.setItem("idTokenPiccoli", idToken)
       })
-      
+
     })
 
   }
@@ -60,13 +43,28 @@ export class UsuarioService implements CanActivate {
     firebase.auth().signOut()
   }
 
-  isUsuarioLogadoAdm(): boolean {
-    
-    if(this.perfilUsuario == undefined && sessionStorage.getItem("perfilPiccoli") != null){
-      this.perfilUsuario = sessionStorage.getItem("perfilPiccoli")
-    }
+  isUsuarioLogadoAdm(): Promise<boolean> {
 
-    return this.perfilUsuario === 'ADM'
+    let perfilUsuario = undefined
+
+    return new Promise((resolve, reject) => {
+      
+      if (firebase.auth().currentUser) {
+
+        firebase.database().ref()
+          .child('usuarios')
+          .orderByChild('email')
+          .equalTo(firebase.auth().currentUser.email).once('value').then((snapshot) => {
+
+            snapshot.forEach((childSnapshot: any) => {
+
+              perfilUsuario = childSnapshot.val().perfil
+              resolve(perfilUsuario === 'ADM')
+            })
+          })
+      } else {
+        reject("Sem usuário logado")
+      }
+    })
   }
-
 }

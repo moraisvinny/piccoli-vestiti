@@ -1,5 +1,5 @@
 <div class="container">
-
+    <ngx-loading [show]="isLoading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
     <div *ngIf="!criarUsuario" class="card" style="width:18rem; margin-top:1rem;">
         <div class="card-body">
             <h5 class="card-title">Faça login para continuar</h5>

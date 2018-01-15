@@ -18,6 +18,7 @@ export class LoginAdministrativoComponent implements OnInit {
   public loginForm: FormGroup
   public criaUsuarioForm: FormGroup
   public msg: string = ""
+  public isLoading: boolean = false
   public usuarioCriadoSucesso: boolean = false
 
   constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private route: Router) {
@@ -44,7 +45,7 @@ export class LoginAdministrativoComponent implements OnInit {
   }
 
   realizaLogin() {
-
+    this.isLoading = true
     if (!this.isFormularioLoginValido()) {
       console.log("formulário inválido")
       return
@@ -56,15 +57,19 @@ export class LoginAdministrativoComponent implements OnInit {
         this.loginForm.value.email,
         this.loginForm.value.senha,
         null)).then(() => {
-          setTimeout(() => {
-            this.route.navigate(['/adm/produtos'])
-          }, 1000);
+
+          this.route.navigate(['/adm/produtos']).then(result => this.isLoading = false)
+
         }).catch((error) => {
-          console.log("Erro ao logar")
+          console.log(error)
+          if (error.code.startsWith("auth")) {
+            this.msg = 'Usuário e/ou senha inválidos'
+          } else {
+            this.msg = 'Ocorreu um erro ao realizar o login'
+          }
+          this.isLoading = false
           return
         })
-
-    
   }
 
   isFormularioLoginValido(): boolean {

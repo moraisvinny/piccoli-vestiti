@@ -12,12 +12,19 @@ export class AdmAuthGuardService implements CanActivate {
     state: RouterStateSnapshot
   ): boolean | Observable<boolean> | Promise<boolean> {
 
-    let isAdm: boolean= this.usuarioService.isUsuarioLogadoAdm()
-    if(!isAdm){
-      this.route.navigate(['/adm/login'])
-    }
-    return isAdm
-    
+    console.log("Inicio do canActivate")
+
+    return new Promise((resolve, reject) => {
+      this.usuarioService.isUsuarioLogadoAdm().then((resposta) => {
+        resolve(resposta)
+      }).catch((reason) => {
+        console.log("Erro retornado do usuarioService = ", reason)
+        this.route.navigate(['/adm/login'])
+        reject(reason)
+      })
+    }).then(() => true, (reason) => false)
+
+
   }
 
   constructor(private usuarioService: UsuarioService, private route: Router) { }
