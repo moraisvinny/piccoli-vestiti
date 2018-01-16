@@ -15,6 +15,7 @@ import { ROUTES } from './app.routes';
 import { HomeComponent } from './home/home.component';
 import { AdmAuthGuardService } from './adm-auth-guard.service';
 import { LoadingModule } from 'ngx-loading';
+import { ListaProdutosComponent } from './area-administrativa/lista-produtos/lista-produtos.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { LoadingModule } from 'ngx-loading';
     CadastroProdutosComponent,
     AreaAdministrativaComponent,
     LoginAdministrativoComponent,
-    HomeComponent
+    HomeComponent,
+    ListaProdutosComponent
   ],
   imports: [
     BrowserModule,

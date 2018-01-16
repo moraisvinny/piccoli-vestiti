@@ -6,6 +6,7 @@ import { CadastroProdutosComponent } from './area-administrativa/cadastro-produt
 import { HomeComponent } from './home/home.component';
 import { AdmAuthGuardService } from './adm-auth-guard.service';
 import { LoginAdministrativoComponent } from './area-administrativa/login-administrativo/login-administrativo.component';
+import { ListaProdutosComponent } from './area-administrativa/lista-produtos/lista-produtos.component';
 
 export const ROUTES: Routes = [
     {
@@ -16,7 +17,8 @@ export const ROUTES: Routes = [
         path: 'adm',
         component: AreaAdministrativaComponent,
         children: [
-            {path: 'produtos', component: CadastroProdutosComponent, canActivate: [AdmAuthGuardService]},
+            {path: 'produtos', component: ListaProdutosComponent, canActivate: [AdmAuthGuardService]},
+            {path: 'cadastrar-produtos', component: CadastroProdutosComponent, canActivate: [AdmAuthGuardService]},
             {path: 'login', component: LoginAdministrativoComponent}
         ]
     }
