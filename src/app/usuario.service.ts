@@ -7,7 +7,6 @@ import { CanActivate } from '@angular/router';
 @Injectable()
 export class UsuarioService implements CanActivate {
 
-  public tokenId: string
   constructor() { }
 
   canActivate(): boolean {
@@ -27,15 +26,7 @@ export class UsuarioService implements CanActivate {
   }
 
   login(usuario: Usuario): Promise<any> {
-    console.log("Inicio login")
-    return firebase.auth().signInWithEmailAndPassword(usuario.email, usuario.senha).then((resposta) => {
-      firebase.auth().currentUser.getIdToken().then((idToken) => {
-
-        this.tokenId = idToken
-        sessionStorage.setItem("idTokenPiccoli", idToken)
-      })
-
-    })
+    return firebase.auth().signInWithEmailAndPassword(usuario.email, usuario.senha)
 
   }
 
@@ -48,7 +39,7 @@ export class UsuarioService implements CanActivate {
     let perfilUsuario = undefined
 
     return new Promise((resolve, reject) => {
-      console.log("TOKEN ID: ", this.tokenId)
+      console.log("Current User", firebase.auth().currentUser)
       if (firebase.auth().currentUser) {
 
         firebase.database().ref()

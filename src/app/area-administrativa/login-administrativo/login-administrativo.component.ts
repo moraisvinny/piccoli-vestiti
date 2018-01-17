@@ -57,9 +57,14 @@ export class LoginAdministrativoComponent implements OnInit {
         this.loginForm.value.email,
         this.loginForm.value.senha,
         null)).then(() => {
-
-          this.route.navigate(['/adm/produtos']).then(result => this.isLoading = false)
-
+          this.usuarioService.isUsuarioLogadoAdm().then((result)=>{
+            if(result) {
+              console.log("Usuario com perfil ADM")
+              this.route.navigate(['/adm/produtos']).then(result => this.isLoading = false)
+            } else {
+              this.route.navigate(['/'])
+            }
+          })
         }).catch((error) => {
           console.log(error)
           if (error.code.startsWith("auth")) {

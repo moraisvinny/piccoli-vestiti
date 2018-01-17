@@ -16,10 +16,11 @@ export const ROUTES: Routes = [
     {
         path: 'adm',
         component: AreaAdministrativaComponent,
+        canActivate: [AdmAuthGuardService],
         children: [
-            {path: 'produtos', component: ListaProdutosComponent, canActivate: [AdmAuthGuardService]},
-            {path: 'cadastrar-produtos', component: CadastroProdutosComponent, canActivate: [AdmAuthGuardService]},
-            {path: 'login', component: LoginAdministrativoComponent}
+            {path: 'produtos', component: ListaProdutosComponent},
+            {path: 'cadastrar-produtos', component: CadastroProdutosComponent},            
         ]
-    }
+    },
+    {path: 'login', component: LoginAdministrativoComponent}
 ]

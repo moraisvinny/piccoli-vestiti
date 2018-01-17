@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsuarioService } from '../usuario.service';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
@@ -8,7 +8,11 @@ import * as firebase from 'firebase';
   templateUrl: './area-administrativa.component.html',
   styleUrls: ['./area-administrativa.component.css']
 })
-export class AreaAdministrativaComponent implements OnInit {
+export class AreaAdministrativaComponent implements OnInit, OnDestroy {
+
+  ngOnDestroy(): void {
+    this.usuarioService.logout()
+  }
 
   public isUsuarioLogado: boolean
   constructor(private usuarioService: UsuarioService, private route: Router) { }
@@ -26,7 +30,7 @@ export class AreaAdministrativaComponent implements OnInit {
 
   sair() {
     this.usuarioService.logout()
-    this.route.navigate(['/adm/login'])
+    this.route.navigate(['/login'])
   }
 
 }

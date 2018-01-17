@@ -16,10 +16,11 @@ export class AdmAuthGuardService implements CanActivate {
 
     return new Promise((resolve, reject) => {
       this.usuarioService.isUsuarioLogadoAdm().then((resposta) => {
+        console.log("resposta - ", resposta)
         resolve(resposta)
       }).catch((reason) => {
         console.log("Erro retornado do usuarioService = ", reason)
-        this.route.navigate(['/adm/login'])
+        this.route.navigate(['/login'])
         reject(reason)
       })
     }).then(() => true, (reason) => false)

@@ -39,4 +39,9 @@ export class ProdutoService {
 
   }
 
+  public listarProdutos(callback): void {
+
+    firebase.database().ref('produtos').on('value', callback)
+  }
+
 }

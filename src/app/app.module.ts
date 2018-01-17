@@ -3,8 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import * as $ from 'jquery';
-
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { CadastroProdutosComponent } from './area-administrativa/cadastro-produtos/cadastro-produtos.component';
 import { ProdutoService } from './produto.service';
@@ -16,6 +15,7 @@ import { HomeComponent } from './home/home.component';
 import { AdmAuthGuardService } from './adm-auth-guard.service';
 import { LoadingModule } from 'ngx-loading';
 import { ListaProdutosComponent } from './area-administrativa/lista-produtos/lista-produtos.component';
+import { MatTableModule } from '@angular/material';
 
 
 @NgModule({
@@ -31,8 +31,10 @@ import { ListaProdutosComponent } from './area-administrativa/lista-produtos/lis
     BrowserModule,
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES),
-    LoadingModule
-
+    LoadingModule,
+    BrowserAnimationsModule,
+    MatTableModule
+    
   ],
   providers: [ProdutoService, UsuarioService, AdmAuthGuardService],
   bootstrap: [AppComponent]
