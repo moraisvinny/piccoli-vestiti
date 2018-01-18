@@ -20,11 +20,13 @@ export class ListaProdutosComponent implements OnInit {
       snapshot.forEach((snapshotChild) => {
 
         let produtoFB = snapshotChild.val()
+        console.log("KEY = ", snapshotChild.key)
         let produto: Produto = new Produto(
           produtoFB.titulo,
           produtoFB.descricao,
           produtoFB.link,
-          null)
+          produtoFB.status)
+        produto.id = snapshotChild.key
         this.produtos.push(produto)
       })
 
@@ -32,7 +34,7 @@ export class ListaProdutosComponent implements OnInit {
     })
   }
 
-  displayedColumns = ['titulo', 'descricao', 'link', 'acao'];
+  displayedColumns = ['titulo', 'link', 'status', 'acao'];
   dataSource: MatTableDataSource<Produto>;
 
 }

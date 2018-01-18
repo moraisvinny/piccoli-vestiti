@@ -19,7 +19,8 @@ export const ROUTES: Routes = [
 //        canActivate: [AdmAuthGuardService],
         children: [
             {path: 'produtos', component: ListaProdutosComponent},
-            {path: 'cadastrar-produtos', component: CadastroProdutosComponent},            
+            {path: 'produto', component: CadastroProdutosComponent},            
+            {path: 'produto/:id', component: CadastroProdutosComponent},
         ]
     },
     {path: 'login', component: LoginAdministrativoComponent}

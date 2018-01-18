@@ -4,6 +4,10 @@
     margin-top: 1.5rem
 }
 
+.bd-navbar {
+    box-shadow:  0 0.5rem 1rem rgba(0,0,0,.05)
+}
+
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }

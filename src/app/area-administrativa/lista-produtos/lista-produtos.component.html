@@ -8,9 +8,9 @@
           <mat-cell *matCellDef="let element"> {{element.titulo}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="descricao">
-          <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.descricao}} </mat-cell>
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="link">
@@ -20,8 +20,8 @@
 
         <ng-container matColumnDef="acao">
           <mat-header-cell *matHeaderCellDef> Ação </mat-header-cell>
-          <mat-cell *matCellDef>
-            <a href="#"><i class="material-icons">mode_edit</i></a>
+          <mat-cell *matCellDef="let element">
+            <a href="#" routerLink="/adm/produto/{{element.id}}"><i class="material-icons">mode_edit</i></a>
             <a href="#"><i class="material-icons">delete</i></a>
           </mat-cell>
         </ng-container>

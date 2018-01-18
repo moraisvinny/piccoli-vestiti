@@ -1,3 +1,4 @@
+<ngx-loading [show]="isLoading"></ngx-loading>
 <div class="container form">
   <div class="row">
     <div class="col-12">
@@ -30,6 +31,14 @@
           <input type="url" class="form-control" [ngClass]="{'is-invalid': produtoForm.get('link').invalid && produtoForm.get('link').touched}"
             formControlName="link" id="link" placeholder="Link do Produto na Elo7">
           <small *ngIf="produtoForm.get('link').invalid && produtoForm.get('link').touched " class="form-text text-danger">Link é obrigatório</small>
+        </div>
+        <div class="form-group">
+          <span style="display: block; margin-bottom:0.5rem">Status do produto</span>
+          <input type="radio" name="status" id="ativo" value="ativo" formControlName="status">
+          <label for="ativo">Ativo</label>
+          <input type="radio" name="status" id="edicao" value="edicao" formControlName="status">
+          <label for="edicao">Edição</label>
+
         </div>
 
         <div class="form-group">

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Produto } from '../../shared/models/produto-model';
 import { ProdutoService } from '../../produto.service'
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro-produtos',
@@ -17,59 +18,107 @@ export class CadastroProdutosComponent implements OnInit {
   public msgErro: string
   public salvouSucesso: boolean
   public urls: any[]
+  public isLoading: boolean = false
+  public produto: Produto = new Produto('', '', '', 'edicao')
 
 
-  constructor(private fb: FormBuilder, private produtoService: ProdutoService) {
+  constructor(private route: Router, private activatedRoute: ActivatedRoute, private fb: FormBuilder, private produtoService: ProdutoService) {
     this.geraForm();
   }
 
   ngOnInit() {
+    this.isLoading = true
+    this.activatedRoute.params.subscribe({
+      next: (parametros) => {
+        if (parametros.id) {
+
+          this.produtoService.obterPorId(parametros.id).then((produto: Produto) => {
+
+            this.produto = produto
+            this.urls = produto.imagens
+
+            this.geraForm()
+            this.isLoading = false
+
+          });
+        }
+      },
+      error: (err) => {
+        console.log("ERRO ", err)
+      }
+    })
   }
 
   public isValidForm(): boolean {
 
     return this.produtoForm.valid
-      && this.imagens.length > 0
-      && this.imagens.length < 3
+      && this.urls != undefined
+      && this.urls.length > 0
       && !this.arquivoInvalido
       && !this.quantidadeArquivosInvalida
   }
 
   public geraForm(): void {
     this.produtoForm = this.fb.group({
-      titulo: ['', Validators.required],
-      descricao: ['', Validators.required],
-      link: ['', Validators.required]
+      titulo: [this.produto.titulo, Validators.required],
+      descricao: [this.produto.descricao, Validators.required],
+      link: [this.produto.link, Validators.required],
+      status: [this.produto.status]
     })
   }
 
   public salvarProduto(): void {
+
+    $('html,body').scrollTop(0);
+    this.isLoading = true
+    
     console.log("Salvar produto - Component " + this.produtoForm.value.titulo)
 
-    let produto: Produto = this.popularProduto();
-    this.produtoService.incluir(produto, (erro: any) => {
-      console.log(erro)
-      if (erro != undefined) {
-        this.msgErro = "Erro ao salvar o produto"
-        return
-      }
-    })
-    this.produtoForm.reset();
-    this.urls = [];
-    $('#imagem1').val('')
+    this.produto = this.popularProduto();
+
+    if (this.produto.id != undefined) {
+      console.log("TEM ID, PRECISO ATUALIZAR")
+      this.produtoService.alterar(this.popularProduto()).then(() => this.finalizaEdicao())
+    } else {
+      console.log("NÂO TEM ID, VOU INCLUIR")
+      this.produtoService.incluir(this.produto)
+        .then(() => this.finalizaEdicao())
+        .catch((erro: any) => {
+          console.log(erro)
+
+          this.msgErro = "Erro ao salvar o produto"
+          this.isLoading = false
+          return
+
+        })
+    }
+
+  }
+
+  private finalizaEdicao(): void {
+    this.isLoading = false
     this.salvouSucesso = true
     setTimeout(() => {
       this.salvouSucesso = false
-    }, 5000);
+      this.produtoForm.reset();
+      this.urls = [];
+      $('#imagem1').val('')
+      this.route.navigate(['/adm/produtos'])
+    }, 1500);
   }
 
   public popularProduto(): Produto {
-    return new Produto(
+    let produto = new Produto(
       this.produtoForm.value.titulo,
       this.produtoForm.value.descricao,
       this.produtoForm.value.link,
-      this.imagens
+      this.produtoForm.value.status
     )
+
+    produto.id = this.produto.id
+    produto.imagens = this.produto.imagens
+    produto.files = this.imagens
+    return produto
 
   }
 
@@ -87,24 +136,22 @@ export class CadastroProdutosComponent implements OnInit {
     for (let i = 0; i < arquivos.length; i++) {
       if (!this.isTipoArquivoValido(arquivos[i])) {
         this.arquivoInvalido = true
-
-
         return
       }
-      
-        var reader = new FileReader();
-    
-        reader.onload = (event:any) => {
-          this.urls[i] = event.target.result;
-        }
-    
-        reader.readAsDataURL((<HTMLInputElement>event.target).files[i]);
-      
-      
+
+      var reader = new FileReader();
+
+      reader.onload = (event: any) => {
+        this.urls[i] = event.target.result;
+      }
+
+      reader.readAsDataURL((<HTMLInputElement>event.target).files[i]);
+
+
       this.imagens.push(arquivos[i])
     }
 
-    
+
 
   }
 
