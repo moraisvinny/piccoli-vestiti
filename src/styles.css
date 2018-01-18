@@ -1,5 +1,8 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+.container.form {
+    margin-top: 1.5rem
+}
 
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }

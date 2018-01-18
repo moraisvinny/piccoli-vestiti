@@ -1,34 +1,35 @@
-<div class="container">
-    <mat-table #table [dataSource]="dataSource">
+<div class="container form">
+  <div class="row">
+    <div class="col-12">
+        <h3>Produtos</h3>
+      <mat-table #table [dataSource]="dataSource" style="margin: 1.5rem">
+        <ng-container matColumnDef="titulo">
+          <mat-header-cell *matHeaderCellDef> Título </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.titulo}} </mat-cell>
+        </ng-container>
 
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-    
-        <!-- Position Column -->
-        <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-          <mat-cell *matCellDef="let bunda"> {{bunda.position}} </mat-cell>
+        <ng-container matColumnDef="descricao">
+          <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.descricao}} </mat-cell>
         </ng-container>
-    
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+
+        <ng-container matColumnDef="link">
+          <mat-header-cell *matHeaderCellDef> Link </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.link}} </mat-cell>
         </ng-container>
-    
-        <!-- Weight Column -->
-        <ng-container matColumnDef="weight">
-          <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+
+        <ng-container matColumnDef="acao">
+          <mat-header-cell *matHeaderCellDef> Ação </mat-header-cell>
+          <mat-cell *matCellDef>
+            <a href="#"><i class="material-icons">mode_edit</i></a>
+            <a href="#"><i class="material-icons">delete</i></a>
+          </mat-cell>
         </ng-container>
-    
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="symbol">
-          <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
-          <mat-cell *matCellDef="let element"><i class="material-icons" >pageview</i></mat-cell>
-        </ng-container>
-    
+
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
+      <button class="btn btn-primary">Incluir Produto</button>
+    </div>
+  </div>
 </div>
