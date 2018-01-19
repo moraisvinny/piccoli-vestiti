@@ -41,6 +41,8 @@ export class CadastroProdutosComponent implements OnInit {
             this.isLoading = false
 
           });
+        } else {
+          this.isLoading = false
         }
       },
       error: (err) => {

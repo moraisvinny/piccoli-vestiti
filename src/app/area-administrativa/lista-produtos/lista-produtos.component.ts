@@ -11,16 +11,27 @@ import { Produto } from '../../shared/models/produto-model';
 export class ListaProdutosComponent implements OnInit {
 
   private produtos: Produto[] = []
+  private idExclusao: string
+  private msg: string
+
+  public displayedColumns = ['titulo', 'link', 'status', 'acao'];
+  public dataSource: MatTableDataSource<Produto>;
+
   constructor(private produtoService: ProdutoService) { }
 
   ngOnInit() {
 
-    this.produtoService.listarProdutos((snapshot) => {
+    this.listarProdutos()
+  }
 
+  public listarProdutos() {
+    this.produtoService.listarProdutos((snapshot) => {
+      
+      this.produtos = []
       snapshot.forEach((snapshotChild) => {
 
         let produtoFB = snapshotChild.val()
-        console.log("KEY = ", snapshotChild.key)
+
         let produto: Produto = new Produto(
           produtoFB.titulo,
           produtoFB.descricao,
@@ -34,7 +45,31 @@ export class ListaProdutosComponent implements OnInit {
     })
   }
 
-  displayedColumns = ['titulo', 'link', 'status', 'acao'];
-  dataSource: MatTableDataSource<Produto>;
+  public preparaExclusao(id) {
+    this.idExclusao = id
+  }
+
+  public excluir() {
+
+    if (!this.idExclusao !== undefined) {
+
+      this.produtoService.excluir(this.idExclusao).then((result) => {
+      
+        this.msg = 'Produto excluído :('
+        $("#alerta").animate({ opacity: 1 }, 500);
+        $("#alerta").css('position', 'relative')
+
+        this.idExclusao = undefined
+
+        setTimeout(() => {
+          $("#alerta").animate({ opacity: 0 }, 500, () => {
+            this.msg = undefined
+            $("#alerta").css('position', 'absolute')
+          });
+
+        }, 2000);
+      })
+    }
+  }
 
 }

@@ -140,14 +140,11 @@ export class ProdutoService {
       })
     })
 
-
-
-
   }
 
   public listarProdutos(callback): void {
 
-    firebase.database().ref('produtos').once('value', callback)
+    firebase.database().ref('produtos').on('value', callback)
   }
 
   public obterPorId(id: string): Promise<Produto> {
@@ -171,6 +168,32 @@ export class ProdutoService {
       return produto
     })
 
+
+  }
+
+  public excluir(id: string): Promise<any> {
+    console.log("Service - excluir")
+    return new Promise((resolve, reject) => {
+      firebase.database().ref(`/produtos/${id}`).once('value').then((snapshot: firebase.database.DataSnapshot) => {
+        let produtoFB = snapshot.val()
+
+        firebase.database().ref(`/produtos/${id}`).remove()
+          .then(() => {
+            produtoFB.imagens.forEach((imagem) => {
+              firebase.storage().refFromURL(imagem).delete()
+                .then(() => resolve())
+                .catch(err =>{
+                  console.log("Erro ao remover do storage: ", err)
+                })
+            })
+          }).catch((err) => {
+            console.log("Erro ao remover do database: ", err)
+            reject(err)
+          })
+
+      })
+
+    })
 
   }
 

@@ -2,7 +2,10 @@
   <div class="row">
     <div class="col-12">
         <h3>Produtos</h3>
-      <mat-table #table [dataSource]="dataSource" style="margin: 1.5rem">
+        <div id="alerta" class="alert alert-success fade show" style="opacity: 0; position: absolute" role="alert">
+            <strong>{{msg}}</strong>
+          </div>
+      <mat-table *ngIf="produtos && produtos.length > 0; else semRegistros" #table [dataSource]="dataSource" style="margin: 1.5rem">
         <ng-container matColumnDef="titulo">
           <mat-header-cell *matHeaderCellDef> Título </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.titulo}} </mat-cell>
@@ -22,14 +25,38 @@
           <mat-header-cell *matHeaderCellDef> Ação </mat-header-cell>
           <mat-cell *matCellDef="let element">
             <a href="#" routerLink="/adm/produto/{{element.id}}"><i class="material-icons">mode_edit</i></a>
-            <a href="#"><i class="material-icons">delete</i></a>
+            <a href="#" (click)="preparaExclusao([element.id])" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">delete</i></a>
           </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
-      <button class="btn btn-primary">Incluir Produto</button>
+      <ng-template #semRegistros>
+        <p style="padding: 1.5rem"> Nenhum produto encontrado</p>
+      </ng-template>
+      <button class="btn btn-primary" routerLink="/adm/produto">Incluir Produto</button>
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Exclusão</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Tem certeza que deseja excluir este produto?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="excluir()">Excluir </button>
+        </div>
+      </div>
+    </div>
+  </div>
