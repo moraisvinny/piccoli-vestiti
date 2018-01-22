@@ -11,6 +11,7 @@ import * as firebase from 'firebase';
 export class AreaAdministrativaComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
+    console.log("Saindo da área administrativa")
     this.usuarioService.logout()
   }
 

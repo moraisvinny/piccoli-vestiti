@@ -10,9 +10,10 @@ import { Produto } from '../../shared/models/produto-model';
 })
 export class ListaProdutosComponent implements OnInit {
 
-  private produtos: Produto[] = []
+  public produtos: Produto[] = []
   private idExclusao: string
-  private msg: string
+  public msg: string
+  public isMsgErro: boolean = false
 
   public displayedColumns = ['titulo', 'link', 'status', 'acao'];
   public dataSource: MatTableDataSource<Produto>;
@@ -56,6 +57,7 @@ export class ListaProdutosComponent implements OnInit {
       this.produtoService.excluir(this.idExclusao).then((result) => {
       
         this.msg = 'Produto excluído :('
+        this.isMsgErro = false
         $("#alerta").animate({ opacity: 1 }, 500);
         $("#alerta").css('position', 'relative')
 
@@ -68,6 +70,23 @@ export class ListaProdutosComponent implements OnInit {
           });
 
         }, 2000);
+      }).catch((err) => {
+        this.msg = `Ocorreu o seguinte erro ao excluir: ${err}`
+        this.isMsgErro = true
+
+
+        $("#alerta").animate({ opacity: 1 }, 500);
+        $("#alerta").css('position', 'relative')
+
+
+        setTimeout(() => {
+          $("#alerta").animate({ opacity: 0 }, 500, () => {
+            this.msg = undefined
+            this.isMsgErro = false
+            $("#alerta").css('position', 'absolute')
+          });
+
+        }, 4000);
       })
     }
   }

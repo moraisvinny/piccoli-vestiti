@@ -16,6 +16,7 @@ import { AdmAuthGuardService } from './adm-auth-guard.service';
 import { LoadingModule } from 'ngx-loading';
 import { ListaProdutosComponent } from './area-administrativa/lista-produtos/lista-produtos.component';
 import { MatTableModule } from '@angular/material';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 
 @NgModule({
@@ -36,7 +37,12 @@ import { MatTableModule } from '@angular/material';
     MatTableModule
     
   ],
-  providers: [ProdutoService, UsuarioService, AdmAuthGuardService],
+  providers: [
+    ProdutoService, 
+    UsuarioService, 
+    AdmAuthGuardService,
+    { provide: LocationStrategy, useClass: PathLocationStrategy }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
