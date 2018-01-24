@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProdutoService } from '../produto.service';
 import { Produto } from '../shared/models/produto-model';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -10,10 +11,20 @@ import { Produto } from '../shared/models/produto-model';
 export class HomeComponent implements OnInit {
 
 
-  public loadAPI: Promise<any>;
-  public produtos: Produto[]
+  public loadAPI: Promise<any>
+  public produtos: Produto[] = []
+  public produtoModal: Produto
+  public contatoForm: FormGroup
 
-  constructor(private produtoService: ProdutoService) {
+  constructor(private produtoService: ProdutoService, private fb: FormBuilder) {
+
+    let produtoInicial = new Produto("", "", "", "")
+    produtoInicial.imagens = [""]
+
+    this.produtos.push(produtoInicial)
+    this.produtoModal = produtoInicial
+
+
     this.loadAPI = new Promise((resolve) => {
       this.loadScript();
       resolve(true);
@@ -31,7 +42,7 @@ export class HomeComponent implements OnInit {
 
     if (!isFound) {
       var dynamicScripts = [
-        "assets/js/freelancer.js", 
+        "assets/js/freelancer.js",
         "assets/js/contact_me.min.js",
         "assets/js/jqBootstrapValidation.min.js"];
 
@@ -48,6 +59,16 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    emailjs.init("user_PDafcdu4DrQAbTzFfhmzj");
+
+    this.fb.group({
+      nome:["", [Validators.required, Validators.minLength(3)]],
+      email: "",
+      telefone: "",
+      mensagem: "",
+    })
+
     this.produtoService.listarProdutos((snapshot) => {
       this.produtos = []
       snapshot.forEach((snapshotChild) => {
@@ -65,6 +86,30 @@ export class HomeComponent implements OnInit {
       })
     })
 
+  }
+
+  public popularModal(produto: Produto) {
+    this.produtoModal = produto
+  }
+
+  public abreLink(link: string): void {
+
+    window.open(link, '_blank')
+  }
+
+  public enviaContato(): void {
+
+    emailjs.send("gmail", "template_4XRS9BZI", {
+      nome: "TESTE VINICIUS",
+      email: "TESTE@TESTE",
+      telefone: "1234",
+      mensagem: "Mensagem de teste"
+    }).then((response) => {
+      console.log("Deu certo!");
+    })
+      .catch((err) => {
+        console.log("Deu erro!");
+      });
   }
 
 }

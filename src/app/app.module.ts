@@ -17,6 +17,7 @@ import { LoadingModule } from 'ngx-loading';
 import { ListaProdutosComponent } from './area-administrativa/lista-produtos/lista-produtos.component';
 import { MatTableModule } from '@angular/material';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { LocationStrategy, PathLocationStrategy } from '@angular/common';
     BrowserModule,
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES),
+    NgbModule.forRoot(),
     LoadingModule,
     BrowserAnimationsModule,
     MatTableModule

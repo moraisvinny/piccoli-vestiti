@@ -374,6 +374,10 @@ a:focus, a:hover, a:active {
   border-color: #fff;
 }
 
+.btn-secondary.fundo-branco {
+  background-color: #ef862f;
+  border-color: #ef862f;
+}
 .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
   background-color: #ef862f;
   color: #fff;
@@ -382,4 +386,11 @@ a:focus, a:hover, a:active {
 
 .link-icone {
   color: #fff;
+}
+
+.modal-header {
+  border-bottom: 0
+}
+.modal-footer {
+  border-top: 0
 }
