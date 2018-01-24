@@ -64,9 +64,9 @@ export class HomeComponent implements OnInit {
 
     this.fb.group({
       nome:["", [Validators.required, Validators.minLength(3)]],
-      email: "",
-      telefone: "",
-      mensagem: "",
+      email: ["", [Validators.required, Validators.email]],
+      telefone: ["", [Validators.required]],
+      mensagem: [""],
     })
 
     this.produtoService.listarProdutos((snapshot) => {

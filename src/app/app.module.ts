@@ -18,6 +18,7 @@ import { ListaProdutosComponent } from './area-administrativa/lista-produtos/lis
 import { MatTableModule } from '@angular/material';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SoNumerosDirective } from './utils/sonumeros.directive'
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AreaAdministrativaComponent,
     LoginAdministrativoComponent,
     HomeComponent,
-    ListaProdutosComponent
+    ListaProdutosComponent,
+    SoNumerosDirective
   ],
   imports: [
     BrowserModule,
