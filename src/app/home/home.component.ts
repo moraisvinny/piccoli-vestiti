@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ProdutoService } from '../produto.service';
+import { Produto } from '../shared/models/produto-model';
 
 @Component({
   selector: 'app-home',
@@ -8,9 +10,10 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
 
 
-  loadAPI: Promise<any>;
+  public loadAPI: Promise<any>;
+  public produtos: Produto[]
 
-  constructor() {
+  constructor(private produtoService: ProdutoService) {
     this.loadAPI = new Promise((resolve) => {
       this.loadScript();
       resolve(true);
@@ -28,7 +31,7 @@ export class HomeComponent implements OnInit {
 
     if (!isFound) {
       var dynamicScripts = [
-        "assets/js/freelancer.min.js", 
+        "assets/js/freelancer.js", 
         "assets/js/contact_me.min.js",
         "assets/js/jqBootstrapValidation.min.js"];
 
@@ -45,7 +48,22 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.produtoService.listarProdutos((snapshot) => {
+      this.produtos = []
+      snapshot.forEach((snapshotChild) => {
 
+        let produtoFB = snapshotChild.val()
+
+        let produto: Produto = new Produto(
+          produtoFB.titulo,
+          produtoFB.descricao,
+          produtoFB.link,
+          produtoFB.status)
+        produto.id = snapshotChild.key
+        produto.imagens = produtoFB.imagens
+        this.produtos.push(produto)
+      })
+    })
 
   }
 
