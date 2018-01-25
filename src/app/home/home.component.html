@@ -107,7 +107,6 @@
             <div class="form-group floating-label-form-group controls mb-0 pb-2">
               <label>Seu telefone</label>
               <input soNumeros class="form-control" id="phone" type="tel" formControlName="telefone"  placeholder="Seu Telefone (Não esqueça o DDD)" >
-              <p *ngIf="msgErro.telefone" class="help-block text-danger">{{msgErro.telefone}}</p>
             </div>
           </div>
           <div class="control-group">
@@ -120,7 +119,7 @@
           <br>
           <div id="success"></div>
           <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-xl">Enviar</button>
+            <button type="submit" class="btn btn-primary btn-xl" data-toggle="modal" data-target="#modalContato" >Enviar</button>
           </div>
         </form>
       </div>
@@ -164,7 +163,7 @@
 
 <div class="copyright py-4 text-center text-white">
   <div class="container">
-    <small>Copyright &copy; Piccoli Vestiti 2018</small>
+    <small>Copyright &copy; Piccoli Vestiti 2018 - Por <a href="https://www.linkedin.com/in/moraisvinny/" target="_blank">Vinicius Morais</a></small>
   </div>
 </div>
 
@@ -202,6 +201,26 @@
         <button type="button" (click)="abreLink(produtoModal.link)" class="btn btn-primary">
           <i class="fa fa-shopping-bag mr-2"></i>
           Comprar!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Contato-->
+<div class="modal fade" id="modalContato" tabindex="-1" role="dialog" aria-labelledby="modalContatoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="text-center text-uppercase text-secondary" id="modalContatoLabel">Contato</h2>
+        <button type="button" class="close" style="float:right" data-dismiss="modal" aria-label="Close">
+          <i class="fa fa-2x fa-times" style="float: right; padding-right:8px; color:red;"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="lead">{{msgContato}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
       </div>
     </div>
   </div>

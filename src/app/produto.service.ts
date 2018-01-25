@@ -147,6 +147,15 @@ export class ProdutoService {
     firebase.database().ref('produtos').on('value', callback)
   }
 
+  public listarProdutosAtivos(callback): void {
+    
+    firebase.database().ref('produtos')
+      .orderByChild("status")
+      .equalTo("ativo")
+      .once('value', callback)
+
+  }
+
   public obterPorId(id: string): Promise<Produto> {
 
     return firebase.database().ref(`produtos/${id}`).once('value').then((snapshot) => {

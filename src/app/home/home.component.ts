@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   public produtoModal: Produto
   public contatoForm: FormGroup
   public msgErro: MsgErro = {nome: undefined, email: undefined,  mensagem:undefined}
+  public msgContato: string
   
 
   constructor(private produtoService: ProdutoService, private fb: FormBuilder) {
@@ -39,10 +40,6 @@ export class HomeComponent implements OnInit {
       this.loadScript();
       resolve(true);
     });
-  }
-
-  public testaForm() {
-    console.log("FORM : ", this.contatoForm.controls)
   }
 
   public loadScript() {
@@ -81,7 +78,7 @@ export class HomeComponent implements OnInit {
       mensagem: ["", [Validators.required]],
     })
 
-    this.produtoService.listarProdutos((snapshot) => {
+    this.produtoService.listarProdutosAtivos((snapshot) => {
       this.produtos = []
       snapshot.forEach((snapshotChild) => {
 
@@ -135,17 +132,25 @@ export class HomeComponent implements OnInit {
   public enviaContato(): void {
 
     if(this.validaForm()) {
+
+      this.msgContato = "Enviando..."
+      
       emailjs.send("gmail", "template_4XRS9BZI", {
         nome: this.contatoForm.value.nome,
         email: this.contatoForm.value.email,
         telefone: this.contatoForm.value.telefone,
         mensagem: this.contatoForm.value.mensagem
       }).then((response) => {
-        // TODO Modal de retorno do envio do email
+        this.msgContato = "Recebemos seu contato. Em breve a gente retorna! ;)"
       })
         .catch((err) => {
-          console.log("Deu erro!");
+          console.log("Erro ao enviar email => ", err);
+          this.msgContato = "Desculpe. Tivemos um probleminha ao enviar seu contato. :("
         });
+
+      this.contatoForm.reset();
+    } else {
+      this.msgContato = "Por favor, preencha corretamente o formulário. :)"
     }
 
   }
