@@ -18,7 +18,8 @@ import { ListaProdutosComponent } from './area-administrativa/lista-produtos/lis
 import { MatTableModule } from '@angular/material';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { SoNumerosDirective } from './utils/sonumeros.directive'
+import { SoNumerosDirective } from './utils/sonumeros.directive';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -38,12 +39,13 @@ import { SoNumerosDirective } from './utils/sonumeros.directive'
     NgbModule.forRoot(),
     LoadingModule,
     BrowserAnimationsModule,
-    MatTableModule
-    
+    MatTableModule,
+    HttpClientModule
+
   ],
   providers: [
-    ProdutoService, 
-    UsuarioService, 
+    ProdutoService,
+    UsuarioService,
     AdmAuthGuardService,
     { provide: LocationStrategy, useClass: PathLocationStrategy }
   ],

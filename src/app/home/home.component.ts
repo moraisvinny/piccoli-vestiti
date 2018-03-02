@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProdutoService } from '../produto.service';
 import { Produto } from '../shared/models/produto-model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { CaptchaService } from '../captcha.service';
 
 
 interface MsgErro {
@@ -13,7 +14,8 @@ interface MsgErro {
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  providers: [CaptchaService]
 })
 
 export class HomeComponent implements OnInit {
@@ -23,11 +25,14 @@ export class HomeComponent implements OnInit {
   public produtos: Produto[] = []
   public produtoModal: Produto
   public contatoForm: FormGroup
-  public msgErro: MsgErro = {nome: undefined, email: undefined,  mensagem:undefined}
+  public msgErro: MsgErro = {nome: undefined, email: undefined,  mensagem: undefined}
   public msgContato: string
-  
 
-  constructor(private produtoService: ProdutoService, private fb: FormBuilder) {
+
+  constructor(
+    private produtoService: ProdutoService,
+    private fb: FormBuilder,
+    private captchaService: CaptchaService) {
 
     let produtoInicial = new Produto("", "", "", "")
     produtoInicial.imagens = [""]
@@ -108,25 +113,30 @@ export class HomeComponent implements OnInit {
 
   private validaForm(): boolean {
 
+    let captchaResponse = grecaptcha.getResponse();
+    console.log("CAPTCHA RESPONSE: ", captchaResponse);
+
     let isFormValido:boolean = true
     this.msgErro = {nome: undefined, email: undefined, mensagem:undefined}
 
-    if(this.contatoForm.get('nome').errors) {
-      this.msgErro.nome = "Nome inválido"
-      isFormValido = false
-    }
+    return false;
 
-    if(this.contatoForm.get('email').errors) {
-      this.msgErro.email = "Email inválido"
-      isFormValido = false
-    }
+    // if(this.contatoForm.get('nome').errors) {
+    //   this.msgErro.nome = "Nome inválido"
+    //   isFormValido = false
+    // }
 
-    if(this.contatoForm.get('mensagem').errors) {
-      this.msgErro.mensagem = "Por favor, digite uma mensagem."
-      isFormValido = false
-    }
-    return isFormValido;
-    
+    // if(this.contatoForm.get('email').errors) {
+    //   this.msgErro.email = "Email inválido"
+    //   isFormValido = false
+    // }
+
+    // if(this.contatoForm.get('mensagem').errors) {
+    //   this.msgErro.mensagem = "Por favor, digite uma mensagem."
+    //   isFormValido = false
+    // }
+    // return isFormValido;
+
   }
 
   public enviaContato(): void {
@@ -134,7 +144,7 @@ export class HomeComponent implements OnInit {
     if(this.validaForm()) {
 
       this.msgContato = "Enviando..."
-      
+
       emailjs.send("gmail", "template_4XRS9BZI", {
         nome: this.contatoForm.value.nome,
         email: this.contatoForm.value.email,
@@ -156,7 +166,7 @@ export class HomeComponent implements OnInit {
   }
 
   public limpaErro(campo: string): void {
-    
+
     this.msgErro[campo] = undefined
   }
 
