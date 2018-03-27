@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { Produto } from './shared/models/produto-model';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ProdutoService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   public incluir(produto: Produto): Promise<any> {
     delete produto.id
@@ -143,16 +144,20 @@ export class ProdutoService {
   }
 
   public listarProdutos(callback): void {
-
-    firebase.database().ref('produtos').on('value', callback)
+    this.http
+      .get('http://localhost/produtos')
+      .subscribe({
+        next: (result) => callback(result)
+      })
   }
 
   public listarProdutosAtivos(callback): void {
-    
-    firebase.database().ref('produtos')
-      .orderByChild("status")
-      .equalTo("ativo")
-      .once('value', callback)
+
+    this.http
+      .get('http://localhost/produtos/ativos')
+      .subscribe({
+        next: (result) => callback(result)
+      })
 
   }
 
@@ -191,7 +196,7 @@ export class ProdutoService {
             produtoFB.imagens.forEach((imagem) => {
               firebase.storage().refFromURL(imagem).delete()
                 .then(() => resolve())
-                .catch(err =>{
+                .catch(err => {
                   console.log("Erro ao remover do storage: ", err)
                 })
             })

@@ -86,17 +86,18 @@ export class HomeComponent implements OnInit {
     })
 
     this.produtoService.listarProdutosAtivos((snapshot) => {
+
       this.produtos = []
       snapshot.forEach((snapshotChild) => {
 
-        let produtoFB = snapshotChild.val()
+        let produtoFB = snapshotChild
 
         let produto: Produto = new Produto(
           produtoFB.titulo,
           produtoFB.descricao,
           produtoFB.link,
           produtoFB.status)
-        produto.id = snapshotChild.key
+        produto.id = snapshotChild._id
         produto.imagens = produtoFB.imagens
         this.produtos.push(produto)
       })
