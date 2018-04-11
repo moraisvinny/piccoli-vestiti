@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ProdutoService {
-
+  private API_URI = 'https://piccoli-vestiti.herokuapp.com';
   constructor(private http: HttpClient) { }
 
   public incluir(produto: Produto): Promise<any> {
@@ -145,7 +145,7 @@ export class ProdutoService {
 
   public listarProdutos(callback): void {
     this.http
-      .get('http://localhost/produtos')
+      .get(`${this.API_URI}/produtos`)
       .subscribe({
         next: (result) => callback(result)
       })
@@ -154,7 +154,7 @@ export class ProdutoService {
   public listarProdutosAtivos(callback): void {
 
     this.http
-      .get('http://localhost/produtos/ativos')
+      .get(`${this.API_URI}/produtos/ativos`)
       .subscribe({
         next: (result) => callback(result)
       })
