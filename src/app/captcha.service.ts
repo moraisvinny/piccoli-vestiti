@@ -1,21 +1,24 @@
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+
 
 @Injectable()
 export class CaptchaService {
 
-  private api: string = "https://www.google.com/recaptcha/api/siteverify"
-  private secret: string = "6Lf0E0oUAAAAAOlAIN9sTNF9hyVGpG2cPYG7SLi6"
-
+  private api: string = "https://piccoli-vestiti.herokuapp.com/captcha"
+  //private api: string = "http://localhost:5000/captcha"
   constructor(private http: HttpClient) { }
 
-  public validarCaptcha(response: string) {
-    this.http
-      .post(this.api, {secret: this.secret, response: response})
-      .subscribe({
-        next: (result)=>console.log(result)
-      });
+  public validaCaptcha (response: string) : Observable<any>{
+
+    return this.http
+      .post(
+        this.api,{captchaResponse: response},
+        {headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        })})
   }
 
 }

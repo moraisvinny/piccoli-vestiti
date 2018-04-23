@@ -3,6 +3,8 @@ import { ProdutoService } from '../produto.service';
 import { Produto } from '../shared/models/produto-model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CaptchaService } from '../captcha.service';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map'
 
 
 interface MsgErro {
@@ -25,7 +27,7 @@ export class HomeComponent implements OnInit {
   public produtos: Produto[] = []
   public produtoModal: Produto
   public contatoForm: FormGroup
-  public msgErro: MsgErro = {nome: undefined, email: undefined,  mensagem: undefined}
+  public msgErro: MsgErro = { nome: undefined, email: undefined, mensagem: undefined }
   public msgContato: string
 
 
@@ -77,7 +79,7 @@ export class HomeComponent implements OnInit {
     emailjs.init("user_PDafcdu4DrQAbTzFfhmzj");
 
     this.contatoForm = this.fb.group({
-      nome:["", [Validators.required, Validators.minLength(3)]],
+      nome: ["", [Validators.required, Validators.minLength(3)]],
       email: ["", [Validators.required, Validators.email]],
       telefone: ["", [Validators.required]],
       mensagem: ["", [Validators.required]],
@@ -111,57 +113,71 @@ export class HomeComponent implements OnInit {
     window.open(link, '_blank')
   }
 
-  private validaForm(): boolean {
+  private validaForm(): Observable<any> {
+
+    let isFormValido: boolean = true
+    this.msgErro = { nome: undefined, email: undefined, mensagem: undefined }
 
     let captchaResponse = grecaptcha.getResponse();
-    console.log("CAPTCHA RESPONSE: ", captchaResponse);
+    return this.captchaService
+      .validaCaptcha(captchaResponse)
+      .map((result) => {
+          if (!result.success) {
+            this.msgErro.mensagem = "Você é um robô? :) Por favor clique em 'Não sou um robô'"
+            isFormValido = false
+          } else {
+            this.msgErro.mensagem = undefined
+            isFormValido = true;
+          }
 
-    let isFormValido:boolean = true
-    this.msgErro = {nome: undefined, email: undefined, mensagem:undefined}
+          if(this.contatoForm.get('nome').errors) {
+            this.msgErro.nome = "Nome inválido"
+            isFormValido = false
+          }
 
-    return false;
+          if(this.contatoForm.get('email').errors) {
+            this.msgErro.email = "Email inválido"
+            isFormValido = false
+          }
 
-    // if(this.contatoForm.get('nome').errors) {
-    //   this.msgErro.nome = "Nome inválido"
-    //   isFormValido = false
-    // }
-
-    // if(this.contatoForm.get('email').errors) {
-    //   this.msgErro.email = "Email inválido"
-    //   isFormValido = false
-    // }
-
-    // if(this.contatoForm.get('mensagem').errors) {
-    //   this.msgErro.mensagem = "Por favor, digite uma mensagem."
-    //   isFormValido = false
-    // }
-    // return isFormValido;
-
+          if(this.contatoForm.get('mensagem').errors) {
+            this.msgErro.mensagem = "Por favor, digite uma mensagem."
+            isFormValido = false
+          }
+          grecaptcha.reset();
+          return isFormValido;
+        }
+      );
   }
 
   public enviaContato(): void {
 
-    if(this.validaForm()) {
+    this.validaForm().subscribe((isFormValido: boolean) => {
 
-      this.msgContato = "Enviando..."
+      if (isFormValido) {
 
-      emailjs.send("gmail", "template_4XRS9BZI", {
-        nome: this.contatoForm.value.nome,
-        email: this.contatoForm.value.email,
-        telefone: this.contatoForm.value.telefone,
-        mensagem: this.contatoForm.value.mensagem
-      }).then((response) => {
-        this.msgContato = "Recebemos seu contato. Em breve a gente retorna! ;)"
-      })
-        .catch((err) => {
-          console.log("Erro ao enviar email => ", err);
-          this.msgContato = "Desculpe. Tivemos um probleminha ao enviar seu contato. :("
-        });
+        this.msgContato = "Enviando..."
 
-      this.contatoForm.reset();
-    } else {
-      this.msgContato = "Por favor, preencha corretamente o formulário. :)"
-    }
+        emailjs.send("gmail", "template_4XRS9BZI", {
+          nome: this.contatoForm.value.nome,
+          email: this.contatoForm.value.email,
+          telefone: this.contatoForm.value.telefone,
+          mensagem: this.contatoForm.value.mensagem
+        }).then((response) => {
+          this.msgContato = "Recebemos seu contato. Em breve a gente retorna! ;)"
+
+        })
+          .catch((err) => {
+            console.log("Erro ao enviar email => ", err);
+            this.msgContato = "Desculpe. Tivemos um probleminha ao enviar seu contato. :("
+          });
+
+        this.contatoForm.reset();
+      } else {
+        this.msgContato = "Por favor, preencha corretamente o formulário. :)"
+      }
+    })
+
 
   }
 
