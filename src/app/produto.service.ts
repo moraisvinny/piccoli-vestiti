@@ -152,7 +152,6 @@ export class ProdutoService {
   }
 
   public listarProdutosAtivos(callback): void {
-
     this.http
       .get(`${this.API_URI}/produtos/ativos`)
       .subscribe({
