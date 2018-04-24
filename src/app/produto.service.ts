@@ -161,28 +161,26 @@ export class ProdutoService {
 
   }
 
-  public obterPorId(id: string): Promise<Produto> {
+  public obterPorId(id: string): Observable<Produto> {
 
-    return firebase.database().ref(`produtos/${id}`).once('value').then((snapshot) => {
-      let produtoFB = snapshot.val()
-
-      let produto: Produto = new Produto(
-        produtoFB.titulo,
-        produtoFB.descricao,
-        produtoFB.link,
-        produtoFB.status
-      )
-
-      produto.id = snapshot.key
-      produto.imagens = []
-      produtoFB.imagens.forEach((imagemUrl, indice) => {
-        produto.imagens.push(imagemUrl)
-      })
-
-      return produto
+    return Observable.create(subscriber => {
+      this.http
+        .get(`${this.API_URI}/produtos/produto/${id}`)
+        .map((produtoBanco: any) => {
+          let produto: Produto = new Produto(
+            produtoBanco.titulo,
+            produtoBanco.descricao,
+            produtoBanco.link,
+            produtoBanco.status)
+          produto.id = produtoBanco._id
+          produto.imagens = []
+          produto.imagens = produtoBanco.imagens
+          return produto
+        })
+        .subscribe(produto => {
+          subscriber.next(produto)
+        })
     })
-
-
   }
 
   public excluir(id: string): Promise<any> {

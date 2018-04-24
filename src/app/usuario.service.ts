@@ -39,7 +39,6 @@ export class UsuarioService implements CanActivate {
     let perfilUsuario = undefined
 
     return new Promise((resolve, reject) => {
-      console.log("Current User", firebase.auth().currentUser)
       if (firebase.auth().currentUser) {
 
         firebase.database().ref()

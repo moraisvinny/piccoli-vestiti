@@ -27,18 +27,16 @@ export class ListaProdutosComponent implements OnInit {
 
   public listarProdutos() {
     this.produtoService.listarProdutos((snapshot) => {
-      
-      this.produtos = []
-      snapshot.forEach((snapshotChild) => {
 
-        let produtoFB = snapshotChild.val()
+      this.produtos = []
+      snapshot.forEach((produtoFB) => {
 
         let produto: Produto = new Produto(
           produtoFB.titulo,
           produtoFB.descricao,
           produtoFB.link,
           produtoFB.status)
-        produto.id = snapshotChild.key
+        produto.id = produtoFB._id
         this.produtos.push(produto)
       })
 
@@ -55,7 +53,7 @@ export class ListaProdutosComponent implements OnInit {
     if (!this.idExclusao !== undefined) {
 
       this.produtoService.excluir(this.idExclusao).then((result) => {
-      
+
         this.msg = 'Produto excluído :('
         this.isMsgErro = false
         $("#alerta").animate({ opacity: 1 }, 500);

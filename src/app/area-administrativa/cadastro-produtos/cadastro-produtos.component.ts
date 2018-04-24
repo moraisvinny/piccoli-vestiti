@@ -32,7 +32,7 @@ export class CadastroProdutosComponent implements OnInit {
       next: (parametros) => {
         if (parametros.id) {
 
-          this.produtoService.obterPorId(parametros.id).then((produto: Produto) => {
+          this.produtoService.obterPorId(parametros.id).subscribe((produto: Produto) => {
 
             this.produto = produto
             this.urls = produto.imagens
@@ -73,7 +73,7 @@ export class CadastroProdutosComponent implements OnInit {
 
     $('html,body').scrollTop(0);
     this.isLoading = true
-    
+
     console.log("Salvar produto - Component " + this.produtoForm.value.titulo)
 
     this.produto = this.popularProduto();
