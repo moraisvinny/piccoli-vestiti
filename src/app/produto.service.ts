@@ -6,8 +6,8 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ProdutoService {
-  //private API_URI = 'https://piccoli-vestiti.herokuapp.com';
-  private API_URI = 'http://localhost:5000';
+  private API_URI = 'https://piccoli-vestiti.herokuapp.com';
+  //private API_URI = 'http://localhost:5000';
   constructor(private http: HttpClient) { }
 
   public incluir(produto: Produto): Promise<any> {
