@@ -6,10 +6,63 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ProdutoService {
-  private API_URI = 'https://piccoli-vestiti.herokuapp.com';
+  //private API_URI = 'https://piccoli-vestiti.herokuapp.com';
+  private API_URI = 'http://localhost:5000';
   constructor(private http: HttpClient) { }
 
   public incluir(produto: Produto): Promise<any> {
+    delete produto.id
+
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(`${this.API_URI}/produtos/produto`, produto)
+        .subscribe({
+          next: (result: any) => {
+            produto.imagens = []
+            this
+              .incluirImagens(result.id, produto)
+              .then((imgs) => {
+                produto.imagens = imgs
+                this.http
+                  .put(`${this.API_URI}/produtos/produto/${result.id}`, produto)
+                  .subscribe({
+                    next: (result: any) => {
+                      resolve()
+                    }
+                  })
+              })
+          },
+          error: err => {
+            console.log(err)
+            reject(err)
+          }
+        })
+
+    })
+
+  }
+
+  private incluirImagens(idProduto: string, produto: Produto): Promise<any> {
+    let imagensRetorno: string[] = []
+    const ref = firebase.storage().ref()
+    let promessas: Promise<any>[] = []
+
+    produto.files.forEach((imagem: File, indice) => {
+      promessas.push(
+        ref
+        .child(`produtos/${idProduto}/imagens/${indice}`)
+        .put(imagem)
+        .then((snapshot) => {
+          imagensRetorno.push(snapshot.downloadURL)
+
+        })
+        .catch(err => { throw new Error(`Erro ao gravar imagens: ${JSON.stringify(err)}`) })
+      )
+    })
+    return Promise.all(promessas).then(() => imagensRetorno)
+  }
+
+  public incluirVelho(produto: Produto): Promise<any> {
     delete produto.id
     delete produto.imagens
 
