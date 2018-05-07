@@ -20,10 +20,19 @@ export class CadastroProdutosComponent implements OnInit {
   public urls: any[]
   public isLoading: boolean = false
   public produto: Produto = new Produto('', '', '', 'edicao')
+  public form: FormData = new FormData();
 
 
   constructor(private route: Router, private activatedRoute: ActivatedRoute, private fb: FormBuilder, private produtoService: ProdutoService) {
     this.geraForm();
+  }
+  private popularForm(): any {
+    this.form.append('titulo', this.produtoForm.get('titulo').value)
+    this.form.append('descricao', this.produtoForm.get('descricao').value)
+    this.form.append('link', this.produtoForm.get('link').value)
+    this.form.append('status', this.produtoForm.get('status').value)
+    if(this.activatedRoute.snapshot.params.id) this.form.append('id', this.activatedRoute.snapshot.params.id)
+
   }
 
   ngOnInit() {
@@ -76,18 +85,27 @@ export class CadastroProdutosComponent implements OnInit {
 
     console.log("Salvar produto - Component " + this.produtoForm.value.titulo)
 
-    this.produto = this.popularProduto();
+    // this.produto = this.popularProduto();
+    this.popularForm();
 
-    if (this.produto.id != undefined) {
+    if (this.form.get('id') != undefined) {
       console.log("TEM ID, PRECISO ATUALIZAR")
-      this.produtoService.alterar(this.popularProduto()).then(() => this.finalizaEdicao())
+      this.produtoService
+        .alterar(this.form)
+        .then(() => this.finalizaEdicao())
+        .catch((err) => {
+          console.log(err)
+          this.msgErro = "Erro ao salvar o produto"
+          this.isLoading = false
+          return
+        })
     } else {
       console.log("NÂO TEM ID, VOU INCLUIR")
-      this.produtoService.incluir(this.produto)
+      this.produtoService
+        .incluir(this.form)
         .then(() => this.finalizaEdicao())
         .catch((erro: any) => {
           console.log(erro)
-
           this.msgErro = "Erro ao salvar o produto"
           this.isLoading = false
           return
@@ -119,7 +137,6 @@ export class CadastroProdutosComponent implements OnInit {
 
     produto.id = this.produto.id
     produto.imagens = this.produto.imagens
-    produto.files = this.imagens
     return produto
 
   }
@@ -127,7 +144,7 @@ export class CadastroProdutosComponent implements OnInit {
   public populaArquivos(event: Event): void {
 
     this.quantidadeArquivosInvalida = false
-    this.imagens = []
+
     this.urls = []
     let arquivos: FileList = (<HTMLInputElement>event.target).files;
     if (arquivos.length > 2) {
@@ -148,9 +165,7 @@ export class CadastroProdutosComponent implements OnInit {
       }
 
       reader.readAsDataURL((<HTMLInputElement>event.target).files[i]);
-
-
-      this.imagens.push(arquivos[i])
+      this.form.append('imagem', arquivos[i]);
     }
 
 

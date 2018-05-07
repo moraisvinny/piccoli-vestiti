@@ -12,8 +12,6 @@ export class AdmAuthGuardService implements CanActivate {
     state: RouterStateSnapshot
   ): boolean | Observable<boolean> | Promise<boolean> {
 
-    console.log("Inicio do canActivate")
-
     return new Promise((resolve, reject) => {
       this.usuarioService.isUsuarioLogadoAdm().then((resposta) => {
         console.log("resposta - ", resposta)

@@ -68,6 +68,8 @@ export class ListaProdutosComponent implements OnInit {
           });
 
         }, 2000);
+
+        this.listarProdutos();
       }).catch((err) => {
         this.msg = `Ocorreu o seguinte erro ao excluir: ${err}`
         this.isMsgErro = true
